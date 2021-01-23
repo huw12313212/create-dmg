@@ -20,10 +20,11 @@ const cli = meow(`
 	  $ create-dmg <app> [destination]
 
 	Options
-	  --overwrite          Overwrite existing DMG with the same name
-	  --identity=<value>   Manually set code signing identity (automatic by default)
-	  --dmg-title=<value>  Manually set DMG title (must be <=27 characters) [default: App name]
-	  --background=<value>  Manually set background image (660x400) [.png]
+	  --overwrite          		Overwrite existing DMG with the same name
+	  --identity=<value>   		Manually set code signing identity (automatic by default)
+	  --dmg-title=<value>  		Manually set DMG title (must be <=27 characters) [default: App name]
+	  --background=<value>		Manually set background image (660x400) [.png]
+	  --file=<value>			Manually set file name
 
 	Examples
 	  $ create-dmg 'Lungo.app'
@@ -40,6 +41,9 @@ const cli = meow(`
 			type: 'string'
 		},
 		background: {
+			type: 'string'
+		},
+		file: {
 			type: 'string'
 		}
 	}
@@ -88,7 +92,7 @@ async function init() {
 	}
 
 	const dmgTitle = cli.flags.dmgTitle || appName;
-	const dmgFilename = `${appName} ${appInfo.CFBundleShortVersionString}.dmg`;
+	const dmgFilename = cli.flags.file || `${appName} ${appInfo.CFBundleShortVersionString}.dmg`;
 	const dmgPath = path.join(destinationPath, dmgFilename);
 	const backgroundImagePath = cli.flags.background || path.join(__dirname, 'assets/dmg-background.png');
 
